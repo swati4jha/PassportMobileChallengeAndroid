@@ -2,7 +2,6 @@ package com.swati.passport.mobilechallenge;
 
 import android.app.Fragment;
 import android.app.FragmentTransaction;
-import android.app.ProgressDialog;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
@@ -57,7 +56,6 @@ public class MainActivity extends AppCompatActivity implements AddProfileDialogF
     FloatingActionButton btnAddProfile;
     CheckBox cbMale,cbFemale;
 
-    ProgressDialog pd;
     private static String GENDER_KEY = "GENDER";
     private static String GENDER_M = "Male";
     private static String GENDER_F = "Female";
@@ -74,15 +72,20 @@ public class MainActivity extends AppCompatActivity implements AddProfileDialogF
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        //Getting firebase database reference
         mDatabase = FirebaseDatabase.getInstance().getReference().child("users");
+
+        //Getting firebase storage reference
         mStorage = FirebaseStorage.getInstance();
 
 
+        //Map to store filters and sort values
         filters = new HashMap<>();
         filters.put(GENDER_KEY,GENDER_ALL);
         filters.put(SORT_ORDER_KEY,SORT_ORDER_ASC);
         filters.put(SORT_BY_KEY,SORT_BY_ID);
 
+        //Initializing views
         btnAddProfile = findViewById(R.id.btnAddProfile);
         btnAddProfile.setOnClickListener(new OnClickListener() {
             @Override
@@ -99,6 +102,7 @@ public class MainActivity extends AppCompatActivity implements AddProfileDialogF
         mLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutManager);
 
+        //Spinner for selecting sort parameter
         Spinner spinner = (Spinner) findViewById(R.id.spinner);
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
                 R.array.filter_options_array, android.R.layout.simple_spinner_item);
@@ -109,7 +113,6 @@ public class MainActivity extends AppCompatActivity implements AddProfileDialogF
             @Override
             public void onItemSelected(AdapterView<?> parent, View view,
                                        int position, long id) {
-                Log.d("item"+position, (String) parent.getItemAtPosition(position));
                 switch (position){
                     case 0:
                         filters.put(SORT_BY_KEY,SORT_BY_ID);
@@ -141,10 +144,12 @@ public class MainActivity extends AppCompatActivity implements AddProfileDialogF
                 // TODO Auto-generated method stub
             }
         });
-}
+    }
 
+    //Method to filter the profile list
     private void filterUser() {
         if(!filters.get(GENDER_KEY).equalsIgnoreCase(GENDER_ALL)){
+            //Filter the list by gender if gender selected.
             mUSerQuery = mDatabase.orderByChild("gender").equalTo(filters.get(GENDER_KEY));
         } else{
             mUSerQuery = mDatabase.orderByChild("_id");
@@ -157,8 +162,8 @@ public class MainActivity extends AppCompatActivity implements AddProfileDialogF
                 for (DataSnapshot noteDataSnapshot : dataSnapshot.getChildren()) {
                     UserVo user = noteDataSnapshot.getValue(UserVo.class);
                     userList.add(user);
-                    Log.d("PRR",user.toString());
                 }
+                //After filter, check for sort params and sort user list.
                 sortUserList();
 
             }
@@ -170,6 +175,7 @@ public class MainActivity extends AppCompatActivity implements AddProfileDialogF
         });
     }
 
+    //Method to sort profile list
     private void sortUserList() {
         if(filters.get(SORT_ORDER_KEY).equalsIgnoreCase(SORT_ORDER_ASC)){
             if(filters.get(SORT_BY_KEY).equalsIgnoreCase(SORT_BY_NAME)){
@@ -238,6 +244,7 @@ public class MainActivity extends AppCompatActivity implements AddProfileDialogF
         }
     }
 
+    //Dialog to add new user profile
     void showDialog() {
         FragmentTransaction ft = getFragmentManager().beginTransaction();
         Fragment prev = getFragmentManager().findFragmentByTag("dialog");
@@ -255,7 +262,6 @@ public class MainActivity extends AppCompatActivity implements AddProfileDialogF
 
     @Override
     public void onDialogSaveClick(DialogFragment dialog, final UserVo user, final ImageView mProfileImage) {
-        Log.d("User to abe added:",user.toString());
         Query lastQuery = mDatabase.orderByKey().limitToLast(1);
         lastQuery.addListenerForSingleValueEvent(new ValueEventListener() {
             long key = 1;
@@ -278,6 +284,7 @@ public class MainActivity extends AppCompatActivity implements AddProfileDialogF
         dialog.dismiss();
     }
 
+    //Adding user image to firebase storage.
     private void addUserImage(ImageView mProfileImage, final UserVo user) {
         Bitmap bitmap = mProfileImage.getDrawingCache();
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -287,15 +294,12 @@ public class MainActivity extends AppCompatActivity implements AddProfileDialogF
         final StorageReference imagesRef = storageRef.child(user.get_id()+"_photo.jpg");
 
         UploadTask uploadTask = imagesRef.putBytes(data1);
-
         Task<Uri> urlTask = uploadTask.continueWithTask(new Continuation<TaskSnapshot, Task<Uri>>() {
             @Override
             public Task<Uri> then(@NonNull Task<TaskSnapshot> task) throws Exception {
                 if (!task.isSuccessful()) {
                     throw task.getException();
                 }
-
-                // Continue with the task to get the download URL
                 return imagesRef.getDownloadUrl();
             }
         }).addOnCompleteListener(new OnCompleteListener<Uri>() {
@@ -304,18 +308,17 @@ public class MainActivity extends AppCompatActivity implements AddProfileDialogF
                 if (task.isSuccessful()) {
                     downloadUrl = String.valueOf(task.getResult());
                     user.setUserImage(downloadUrl.toString());
-                    Log.d("Image",downloadUrl.toString());
-
+                    //Adding the usre object to database once image is added in the storage
                     mDatabase.child(String.valueOf(user.get_id())).setValue(user);
                 } else {
-                    // Handle failures
-                    // ...
+                    Log.d("Error","Error adding image");
                 }
             }
         });
     }
 
 
+    //Checkbox onclick listener for male and female.
     @Override
     public void onClick(View v) {
         if(cbMale.isChecked() && cbFemale.isChecked()){
@@ -327,7 +330,6 @@ public class MainActivity extends AppCompatActivity implements AddProfileDialogF
         }else{
             filters.put(GENDER_KEY,GENDER_ALL);
         }
-        Log.d("Gender",filters.get(GENDER_KEY));
         filterUser();
     }
 

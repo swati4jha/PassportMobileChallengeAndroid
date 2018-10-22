@@ -61,6 +61,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnTouchLi
     }
 
 
+    //Hobbies to be enabled for editing on touch of the view.
     @Override
     public boolean onTouch(View v, MotionEvent event) {
         EditText hobbies = v.findViewById(v.getId());
@@ -81,6 +82,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnTouchLi
                     mUser = noteDataSnapshot.getValue(UserVo.class);
                 }
                 if(null != mUser){
+                    // Setting background color based on gender
                     if(mUser.getGender().equalsIgnoreCase("Female")){
                         findViewById(R.id.profileView).setBackgroundResource(R.drawable.female);
                     }else{
@@ -90,13 +92,12 @@ public class ProfileActivity extends AppCompatActivity implements View.OnTouchLi
                     age.setText(String.valueOf(mUser.getAge()));
                     gender.setText(mUser.getGender());
                     hobbies.setText(mUser.getHobbies());
+                    //Loading profile image using Picasso library
                     Picasso.with(imageViewProfile.getContext()).load(mUser.getUserImage()).transform(new Utils.CircleTransform()).into(imageViewProfile);
 
                 }else{
                     finish();
                 }
-
-
             }
 
             @Override
@@ -114,7 +115,6 @@ public class ProfileActivity extends AppCompatActivity implements View.OnTouchLi
     @Override
     public void onStop() {
         super.onStop();
-
         // Remove post value event listener
         if (mUserListener != null) {
             mUSerQuery.removeEventListener(mUserListener);
@@ -125,6 +125,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnTouchLi
     public void onClick(View v) {
         final Context _this = this;
         switch (v.getId()){
+            //case to delete profile
             case R.id.buttonDelete:
                 new AlertDialog.Builder(v.getContext())
                         .setMessage("Do you want to delete the profile?")
@@ -140,7 +141,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnTouchLi
                         .show();
 
                 break;
-
+                // case to update profile.
             case R.id.buttonUpdate:
                 String userHobbies = hobbies.getText().toString();
                 if(TextUtils.isEmpty(userHobbies)){

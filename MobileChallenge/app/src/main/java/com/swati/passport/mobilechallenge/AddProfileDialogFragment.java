@@ -40,9 +40,6 @@ public class AddProfileDialogFragment extends DialogFragment{
     EditText mName,mAge,mHobbies;
     RadioButton mGender;
     RadioGroup mRadioGroup;
-
-
-    private static final String REQUIRED = "Required";
     Context mContext;
 
     public AddProfileDialogFragment(){
@@ -52,6 +49,8 @@ public class AddProfileDialogFragment extends DialogFragment{
         AddProfileDialogFragment f = new AddProfileDialogFragment();
         return f;
     }
+
+    //Interface when user clicks on the save button on dialog.
     public interface DialogListener {
         public void onDialogSaveClick(DialogFragment dialog, UserVo user, ImageView mProfileImage);
     }
@@ -92,16 +91,19 @@ public class AddProfileDialogFragment extends DialogFragment{
         mProfileImage = v.findViewById(R.id.userImage);
         mRadioGroup = v.findViewById(R.id.rGroupGender);
 
+        //Radio button for gender
         mRadioGroup.setOnCheckedChangeListener(new OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
                 mGender = v.findViewById(checkedId);
-                Log.d("test",mGender.getText()+"");
             }
         });
+
+        //Creating round image for profile
         Bitmap mbitmap = ((BitmapDrawable) getResources().getDrawable(R.drawable.profile)).getBitmap();
         createRoundedImage(mbitmap);
 
+        //Save button dialog box
         Button buttonSave = v.findViewById(R.id.buttonSave);
         buttonSave.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -119,6 +121,7 @@ public class AddProfileDialogFragment extends DialogFragment{
             }
         });
 
+        //Cancel button dialog box.
         Button buttonCancel = v.findViewById(R.id.buttonCancel);
         buttonCancel.setOnClickListener(new OnClickListener() {
             @Override
@@ -127,6 +130,7 @@ public class AddProfileDialogFragment extends DialogFragment{
             }
         });
 
+        //Image upload button
         ImageButton buttonLoadImage = (ImageButton) v.findViewById(R.id.imageButtonProfile);
         buttonLoadImage.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -141,7 +145,7 @@ public class AddProfileDialogFragment extends DialogFragment{
         return v;
     }
 
-
+    //Method to validate input params : name,age, hobbies before creating profile.
     private UserVo validateInputParams(String gender) {
         String name = mName.getText().toString();
         String age = mAge.getText().toString();
@@ -158,7 +162,7 @@ public class AddProfileDialogFragment extends DialogFragment{
         } else if(null != age){
             try {
                  userAge = Integer.parseInt(age);
-                 if(userAge < 0 || userAge > 1000){
+                 if(userAge < 1 || userAge > 1000){
                      Toast.makeText(mContext,"Please enter valid age.",Toast.LENGTH_SHORT).show();
                      return null;
                  }
@@ -174,7 +178,8 @@ public class AddProfileDialogFragment extends DialogFragment{
             return null;
         }
 
-        UserVo user = new UserVo(-1,name,userAge,gender,"abc",hobbies);
+        //Creating user object with defaut id and image, id and image will be set in savedialog
+        UserVo user = new UserVo(-1,name,userAge,gender,"image",hobbies);
         return user;
     }
 
