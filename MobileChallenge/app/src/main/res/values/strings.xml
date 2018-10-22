@@ -1,0 +1,18 @@
+<resources>
+    <string name="app_name">MobileChallenge</string>
+    <string name="label_gender">Gender</string>
+    <string name="label_name">Name</string>
+    <string name="label_age">Age </string>
+    <string name="label_hobby">Hobbies </string>
+    <string name="btn_delete">Delete</string>
+    <string name="btn_update">Update</string>
+    <string name="label_female">Female</string>
+    <string name="label_male">Male</string>
+    <string-array name="filter_options_array">
+        <item>Default(ID)</item>
+        <item>Name(Asc)</item>
+        <item>Name(Desc)</item>
+        <item>Age(Asc)</item>
+        <item>Age(Desc)</item>
+    </string-array>
+</resources>
