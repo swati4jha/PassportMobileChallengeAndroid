@@ -146,8 +146,8 @@ public class ProfileActivity extends AppCompatActivity implements View.OnTouchLi
                 String userHobbies = hobbies.getText().toString();
                 if(TextUtils.isEmpty(userHobbies)){
                     Toast.makeText(this,"Please enter hobbies.",Toast.LENGTH_SHORT).show();
-                } else{
-                    mUser.setHobbies(hobbies.getText().toString());
+                } else if(!mUser.getHobbies().equals(userHobbies)){
+                    mUser.setHobbies(userHobbies);
                     mDatabase.child(userID).setValue(mUser);
                     hobbies.setCursorVisible(false);
                     hobbies.setKeyListener(null);

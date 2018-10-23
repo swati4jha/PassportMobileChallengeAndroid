@@ -7,11 +7,6 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.BitmapShader;
-import android.graphics.Canvas;
-import android.graphics.Paint;
-import android.graphics.RectF;
-import android.graphics.Shader;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
@@ -195,13 +190,8 @@ public class AddProfileDialogFragment extends DialogFragment{
 
     @NonNull
     private void createRoundedImage(Bitmap mbitmap) {
-        Bitmap imageRounded = Bitmap.createBitmap(mbitmap.getWidth(), mbitmap.getHeight(), mbitmap.getConfig());
-        Canvas canvas = new Canvas(imageRounded);
-        Paint mpaint = new Paint();
-        mpaint.setAntiAlias(true);
-        mpaint.setShader(new BitmapShader(mbitmap, Shader.TileMode.CLAMP, Shader.TileMode.CLAMP));
-        canvas.drawRoundRect((new RectF(0, 0, mbitmap.getWidth(), mbitmap.getHeight())), mbitmap.getWidth(), mbitmap.getHeight(), mpaint);
-        mProfileImage.setImageBitmap(imageRounded);
+        Bitmap bitmap = Utils.getBitmap(mbitmap);
+        mProfileImage.setImageBitmap(bitmap);
         mProfileImage.setDrawingCacheEnabled(true);
         mProfileImage.buildDrawingCache();
 
@@ -214,6 +204,7 @@ public class AddProfileDialogFragment extends DialogFragment{
         if (requestCode == RESULT_LOAD_IMAGE  && resultCode == Activity.RESULT_OK && null != data) {
             Uri selectedImage = data.getData();
             try{
+
                 createRoundedImage(BitmapFactory.decodeStream(getActivity().getContentResolver().openInputStream(selectedImage)));
             }catch (FileNotFoundException ex){
                 Log.d("Exception",ex.toString());
