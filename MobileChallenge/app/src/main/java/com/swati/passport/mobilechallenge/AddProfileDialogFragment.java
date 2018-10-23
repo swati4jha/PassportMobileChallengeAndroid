@@ -60,10 +60,10 @@ public class AddProfileDialogFragment extends DialogFragment{
     // The interface to deliver action events to mainactivity
     DialogListener mListener;
 
-   @Override
+    @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-       mContext = context;
+        mContext = context;
         try {
             mListener = (DialogListener) context;
         } catch (ClassCastException e) {
@@ -139,7 +139,7 @@ public class AddProfileDialogFragment extends DialogFragment{
             public void onClick(View arg0) {
                 try {
                     if (ActivityCompat.checkSelfPermission(mContext, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-                        ActivityCompat.requestPermissions((Activity) mContext, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE}, RESULT_LOAD_IMAGE);
+                        requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE}, RESULT_LOAD_IMAGE);
                     } else {
                         Intent i = new Intent(
                                 Intent.ACTION_PICK,
@@ -171,11 +171,11 @@ public class AddProfileDialogFragment extends DialogFragment{
             return null;
         } else if(null != age){
             try {
-                 userAge = Integer.parseInt(age);
-                 if(userAge < 1 || userAge > 1000){
-                     Toast.makeText(mContext,"Please enter valid age.",Toast.LENGTH_SHORT).show();
-                     return null;
-                 }
+                userAge = Integer.parseInt(age);
+                if(userAge < 1 || userAge > 1000){
+                    Toast.makeText(mContext,"Please enter valid age.",Toast.LENGTH_SHORT).show();
+                    return null;
+                }
             } catch (Exception ex){
                 Toast.makeText(mContext,"Please enter valid age.",Toast.LENGTH_SHORT).show();
                 return null;
