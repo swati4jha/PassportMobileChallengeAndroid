@@ -93,13 +93,13 @@
 
         <Spinner
             android:id="@+id/spinner"
-            android:layout_width="145dp"
+            android:layout_width="125dp"
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
             android:layout_alignParentLeft="true"
             android:layout_alignParentBottom="true"
-            android:layout_marginStart="53dp"
-            android:layout_marginLeft="53dp"
+            android:layout_marginStart="69dp"
+            android:layout_marginLeft="69dp"
             android:layout_marginRight="20dp"
             android:layout_marginBottom="16dp" />
 
@@ -110,13 +110,9 @@
             android:layout_alignBottom="@+id/spinner"
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
-            android:layout_marginStart="20dp"
-            android:layout_marginLeft="20dp"
             android:layout_marginEnd="103dp"
             android:layout_marginRight="103dp"
             android:layout_marginBottom="-7dp"
-            android:layout_toEndOf="@+id/spinner"
-            android:layout_toRightOf="@+id/spinner"
             android:text="@string/label_male" />
 
         <CheckBox
@@ -137,8 +133,8 @@
             android:layout_alignTop="@+id/checkBoxM"
             android:layout_alignParentStart="true"
             android:layout_alignParentLeft="true"
-            android:layout_marginStart="8dp"
-            android:layout_marginLeft="8dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginLeft="16dp"
             android:layout_marginTop="4dp"
             android:text="Sort By:" />
     </RelativeLayout>

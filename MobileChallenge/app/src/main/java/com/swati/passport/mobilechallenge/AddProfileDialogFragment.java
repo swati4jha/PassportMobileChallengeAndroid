@@ -232,8 +232,6 @@ public class AddProfileDialogFragment extends DialogFragment{
                             Intent.ACTION_PICK,
                             android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                     startActivityForResult(i, RESULT_LOAD_IMAGE);
-                } else {
-                    Toast.makeText(mContext,"Gallery permission needed.",Toast.LENGTH_SHORT).show();
                 }
                 break;
         }
