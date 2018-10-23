@@ -149,10 +149,6 @@ public class AddProfileDialogFragment extends DialogFragment{
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-//                Intent i = new Intent(
-//                        Intent.ACTION_PICK,
-//                        android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-//                startActivityForResult(i, RESULT_LOAD_IMAGE);
             }
         });
 
@@ -238,7 +234,6 @@ public class AddProfileDialogFragment extends DialogFragment{
                     startActivityForResult(i, RESULT_LOAD_IMAGE);
                 } else {
                     Toast.makeText(mContext,"Gallery permission needed.",Toast.LENGTH_SHORT).show();
-                    //do something like displaying a message that he didn`t allow the app to access gallery and you wont be able to let him select from gallery
                 }
                 break;
         }
